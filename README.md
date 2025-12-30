@@ -1,68 +1,68 @@
 # Twitter Automatic
 
-Twitter/X自動投稿ツール - コマンドラインからツイートを投稿できるシンプルなBashスクリプト
+Twitter/X Automation Tool - A simple Bash script to post tweets from the command line
 
-## 機能
+## Features
 
-- twurlの簡単インストール機能
-- コマンドラインから直接ツイートを投稿
-- 複数アカウントのサポート
-- スクリプト内でアカウント認証が可能
-- アカウント一覧の表示
+- Easy twurl installation
+- Post tweets directly from command line
+- Multiple account support
+- Account authorization within the script
+- Display list of accounts
 
-## 必要要件
+## Requirements
 
-- `twurl` (Twitter API用のコマンドラインツール)
+- `twurl` (Command-line tool for Twitter API)
 - Twitter Developer Account
 - Twitter API credentials
 
-## セットアップ
+## Setup
 
-### 1. twurlのインストール
+### 1. Install twurl
 
-#### 方法1: tweet.shスクリプトを使用（簡単）
+#### Method 1: Using tweet.sh script (Easy)
 
 ```bash
 ./tweet.sh -s
-# または
+# or
 ./tweet.sh --setup
 ```
 
-#### 方法2: 直接インストール
+#### Method 2: Direct installation
 
 ```bash
 gem install twurl
 ```
 
-※ 権限エラーが出る場合は `sudo gem install twurl` を実行してください。
+※ If you get a permission error, run `sudo gem install twurl`.
 
-### 2. Twitter API認証情報の取得
+### 2. Get Twitter API Credentials
 
-1. https://developer.twitter.com/ にアクセス
-2. Developer Accountでサインイン（未作成の場合は作成）
-3. 新しいAppを作成（または既存のものを使用）
-4. "Keys and Tokens" セクションに移動
-5. 以下の情報を取得:
+1. Go to https://developer.twitter.com/
+2. Sign in with your Developer Account (create one if needed)
+3. Create a new App (or use an existing one)
+4. Navigate to "Keys and Tokens" section
+5. Get the following information:
    - **API Key** (Consumer Key)
    - **API Secret** (Consumer Secret)
    - **Access Token**
    - **Access Token Secret**
 
-### 3. twurlの認証
+### 3. Authorize twurl
 
-#### 方法1: tweet.shスクリプトを使用（簡単）
+#### Method 1: Using tweet.sh script (Easy)
 
 ```bash
 ./tweet.sh -a YOUR_API_KEY YOUR_API_SECRET
-# または
+# or
 ./tweet.sh --authorize YOUR_API_KEY YOUR_API_SECRET
 ```
 
-その後、ブラウザで表示されるPINコードを入力してください。
+Then enter the PIN code displayed in your browser.
 
-#### 方法2: twurlコマンドを直接使用
+#### Method 2: Using twurl command directly
 
-以下のコマンドで認証情報を設定:
+Set credentials with the following command:
 
 ```bash
 twurl authorize --consumer-key YOUR_API_KEY \
@@ -71,124 +71,124 @@ twurl authorize --consumer-key YOUR_API_KEY \
                 --access-token-secret YOUR_ACCESS_TOKEN_SECRET
 ```
 
-または、対話式で設定:
+Or set up interactively:
 
 ```bash
 twurl authorize --consumer-key YOUR_API_KEY \
                 --consumer-secret YOUR_API_SECRET
 ```
 
-### 4. セットアップの確認
+### 4. Verify Setup
 
 ```bash
 twurl accounts
 ```
 
-設定したアカウントが表示されればOKです。
+If your configured account is displayed, you're all set!
 
-## 使い方
+## Usage
 
-### セットアップ (twurlインストール)
+### Setup (Install twurl)
 
 ```bash
 ./tweet.sh -s
-# または
+# or
 ./tweet.sh --setup
 ```
 
-### 基本的な投稿
+### Basic Tweet
 
 ```bash
-./tweet.sh "ここにメッセージを入力"
+./tweet.sh "Your message here"
 ```
 
-### アカウントを指定して投稿
+### Tweet with Specific Account
 
 ```bash
-./tweet.sh "ここにメッセージを入力" アカウント名
+./tweet.sh "Your message here" account_name
 ```
 
-### アカウント認証
+### Authorize Account
 
 ```bash
 ./tweet.sh -a YOUR_API_KEY YOUR_API_SECRET
-# または
+# or
 ./tweet.sh --authorize YOUR_API_KEY YOUR_API_SECRET
 ```
 
-### アカウント一覧を表示
+### List Accounts
 
 ```bash
 ./tweet.sh -l
-# または
+# or
 ./tweet.sh --list
-# または
+# or
 ./tweet.sh accounts
 ```
 
-### ヘルプを表示
+### Show Help
 
 ```bash
 ./tweet.sh -h
-# または
+# or
 ./tweet.sh --help
 ```
 
-## 例
+## Examples
 
 ```bash
-# セットアップ (twurlをインストール)
+# Setup (install twurl)
 ./tweet.sh -s
 
-# ヘルプを表示
+# Show help
 ./tweet.sh -h
 
-# アカウントを認証
+# Authorize account
 ./tweet.sh -a abc123xyz abc123secretxyz
 
-# デフォルトアカウントで投稿
-./tweet.sh "今日はいい天気です"
+# Tweet with default account
+./tweet.sh "Nice weather today"
 
-# 特定のアカウントで投稿
-./tweet.sh "新製品のお知らせ" company_account
+# Tweet with specific account
+./tweet.sh "New product announcement" company_account
 
-# 利用可能なアカウントを確認
+# Check available accounts
 ./tweet.sh -l
 ```
 
-## トラブルシューティング
+## Troubleshooting
 
-### 投稿に失敗する場合
+### If posting fails
 
-1. twurlが正しくインストールされているか確認:
+1. Check if twurl is installed correctly:
    ```bash
    which twurl
    ```
 
-2. アカウントが認証されているか確認:
+2. Check if account is authorized:
    ```bash
    twurl accounts
    ```
 
-3. API認証情報が有効か確認（Twitter Developer Portalで確認）
+3. Verify API credentials are valid (check in Twitter Developer Portal)
 
-### 複数アカウント使用時
+### Using Multiple Accounts
 
-デフォルトアカウントを設定:
+Set default account:
 ```bash
 twurl set default YOUR_USERNAME
 ```
 
-## ライセンス
+## License
 
-このプロジェクトは自由に使用できます。
+This project is free to use.
 
-## 注意事項
+## Notes
 
-- Twitter APIの利用規約を遵守してください
-- API Rate Limitに注意してください
-- 自動投稿の頻度には気をつけてください
+- Please comply with Twitter API terms of service
+- Be aware of API Rate Limits
+- Be careful with automated posting frequency
 
-## 参考ウェブサイト
-【決定版】ターミナルからX (Twitter) に投稿！twurlで快適コマンドラインライフ https://note.com/takaesu7431/n/n91d4a36bb7b2
-Twitter Developer Portal https://developer.x.com/en
+## References
+- [Complete Guide] Post to X (Twitter) from Terminal! Comfortable Command Line Life with twurl https://note.com/takaesu7431/n/n91d4a36bb7b2
+- Twitter Developer Portal https://developer.x.com/en

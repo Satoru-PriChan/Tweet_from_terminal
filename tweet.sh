@@ -1,118 +1,118 @@
 #!/bin/bash
 
-# --- セットアップオプション ---
+# --- Setup Option ---
 if [ "$1" = "-s" ] || [ "$1" = "--setup" ]; then
-  echo "## ⚙️  twurlをインストールします ##"
-  echo "実行コマンド: gem install twurl"
+  echo "## ⚙️  Installing twurl ##"
+  echo "Running command: gem install twurl"
   gem install twurl
   if [ $? -eq 0 ]; then
-    echo "## ✅ twurlのインストールが完了しました！ ##"
-    echo "次のステップ: ./tweet.sh -a API_KEY API_SECRET でアカウントを認証してください"
+    echo "## ✅ twurl installation completed! ##"
+    echo "Next step: Authorize your account with ./tweet.sh -a API_KEY API_SECRET"
   else
-    echo "## ❌ twurlのインストールに失敗しました。 ##"
-    echo "sudoが必要な場合があります: sudo gem install twurl"
+    echo "## ❌ twurl installation failed. ##"
+    echo "You may need sudo: sudo gem install twurl"
   fi
   exit $?
 fi
 
-# --- ヘルプオプション ---
+# --- Help Option ---
 if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-  echo "## 📖 tweet.sh - Twitter/X自動投稿ツール ##"
+  echo "## 📖 tweet.sh - Twitter/X Automation Tool ##"
   echo ""
-  echo "使い方:"
-  echo "  セットアップ (twurlインストール):"
+  echo "Usage:"
+  echo "  Setup (install twurl):"
   echo "    ./tweet.sh -s"
   echo "    ./tweet.sh --setup"
   echo ""
-  echo "  基本投稿:"
-  echo "    ./tweet.sh \"ここにメッセージを入力\""
+  echo "  Basic tweet:"
+  echo "    ./tweet.sh \"Your message here\""
   echo ""
-  echo "  アカウント指定投稿:"
-  echo "    ./tweet.sh \"ここにメッセージを入力\" アカウント名"
+  echo "  Tweet with specific account:"
+  echo "    ./tweet.sh \"Your message here\" account_name"
   echo ""
-  echo "  アカウント認証:"
+  echo "  Authorize account:"
   echo "    ./tweet.sh -a API_KEY API_SECRET"
   echo "    ./tweet.sh --authorize API_KEY API_SECRET"
   echo ""
-  echo "  アカウント一覧:"
+  echo "  List accounts:"
   echo "    ./tweet.sh -l"
   echo "    ./tweet.sh --list"
   echo "    ./tweet.sh accounts"
   echo ""
-  echo "  ヘルプ表示:"
+  echo "  Show help:"
   echo "    ./tweet.sh -h"
   echo "    ./tweet.sh --help"
   echo ""
-  echo "例:"
+  echo "Examples:"
   echo "  ./tweet.sh -s"
-  echo "  ./tweet.sh \"今日はいい天気です\""
-  echo "  ./tweet.sh \"新製品のお知らせ\" company_account"
+  echo "  ./tweet.sh \"Nice weather today\""
+  echo "  ./tweet.sh \"New product announcement\" company_account"
   echo "  ./tweet.sh -a abc123xyz abc123secretxyz"
   echo "  ./tweet.sh -l"
   exit 0
 fi
 
-# --- アカウント認証オプション ---
+# --- Account Authorization Option ---
 if [ "$1" = "-a" ] || [ "$1" = "--authorize" ]; then
   if [ -z "$2" ] || [ -z "$3" ]; then
-    echo "使い方: ./tweet.sh --authorize API_KEY API_SECRET"
-    echo "例: ./tweet.sh --authorize your_api_key your_api_secret"
+    echo "Usage: ./tweet.sh --authorize API_KEY API_SECRET"
+    echo "Example: ./tweet.sh --authorize your_api_key your_api_secret"
     exit 1
   fi
-  echo "## 🔐 twurlアカウント認証を実行します ##"
+  echo "## 🔐 Running twurl account authorization ##"
   echo "API Key: $2"
   echo "API Secret: $3"
   twurl authorize --consumer-key "$2" --consumer-secret "$3"
   exit $?
 fi
 
-# --- アカウント一覧表示オプション ---
+# --- List Accounts Option ---
 if [ "$1" = "-l" ] || [ "$1" = "--list" ] || [ "$1" = "accounts" ]; then
-  echo "## 📋 利用可能なアカウント一覧 ##"
+  echo "## 📋 Available Accounts ##"
   twurl accounts
   exit 0
 fi
 
-# --- 初期設定 ---
-# 第二引数がアカウント名、第一引数が投稿内容
+# --- Initial Setup ---
+# First argument is tweet content, second argument is account name
 TWEET_CONTENT="$1"
-ACCOUNT_NAME="$2" # 第二引数が空でもそのまま受け入れる
+ACCOUNT_NAME="$2" # Accept empty second argument as-is
 
-# --- 実行前のチェック ---
+# --- Pre-execution Check ---
 
-# 投稿内容 (第一引数) が空の場合は使い方を表示して終了
+# If tweet content (first argument) is empty, show usage and exit
 if [ -z "$TWEET_CONTENT" ]; then
-  echo "使い方:"
-  echo "  セットアップ: ./tweet.sh -s (または --setup)"
-  echo "  基本: ./tweet.sh \"ここにメッセージを入力\""
-  echo "  アカウント指定: ./tweet.sh \"ここにメッセージを入力\" アカウント名"
-  echo "  アカウント認証: ./tweet.sh -a API_KEY API_SECRET (または --authorize)"
-  echo "  アカウント一覧: ./tweet.sh -l (または --list, accounts)"
-  echo "  ヘルプ表示: ./tweet.sh -h (または --help)"
+  echo "Usage:"
+  echo "  Setup: ./tweet.sh -s (or --setup)"
+  echo "  Basic: ./tweet.sh \"Your message here\""
+  echo "  With account: ./tweet.sh \"Your message here\" account_name"
+  echo "  Authorize: ./tweet.sh -a API_KEY API_SECRET (or --authorize)"
+  echo "  List accounts: ./tweet.sh -l (or --list, accounts)"
+  echo "  Show help: ./tweet.sh -h (or --help)"
   exit 1
 fi
 
-# --- twurlのオプション設定 ---
+# --- twurl Option Setup ---
 
-# アカウント名が指定されているかチェック
+# Check if account name is specified
 if [ -n "$ACCOUNT_NAME" ]; then
     ACCOUNT_OPTION="-u $ACCOUNT_NAME"
-    echo "## 🐦 Xに投稿します (アカウント: $ACCOUNT_NAME)... ##"
+    echo "## 🐦 Posting to X (Account: $ACCOUNT_NAME)... ##"
 else
     ACCOUNT_OPTION=""
-    echo "## 🐦 Xに投稿します (デフォルトアカウント)... ##"
+    echo "## 🐦 Posting to X (Default account)... ##"
 fi
 
-# --- 投稿処理 ---
+# --- Tweet Posting ---
 
-echo "投稿内容: \"$TWEET_CONTENT\""
+echo "Tweet content: \"$TWEET_CONTENT\""
 
-# twurlコマンドでX API v2のtweetsエンドポイントを叩く
-# ACCOUNT_OPTION 変数には "-u account_name" または "" が入っている
+# Call X API v2 tweets endpoint using twurl
+# ACCOUNT_OPTION variable contains "-u account_name" or ""
 twurl -u $ACCOUNT_OPTION -X POST -A "Content-type: application/json" -d "{\"text\": \"$TWEET_CONTENT\"}" /2/tweets
 
 if [ $? -eq 0 ]; then
-    echo "## ✅ 投稿が完了しました！ ##"
+    echo "## ✅ Tweet posted successfully! ##"
 else
-    echo "## ❌ 投稿に失敗しました。 ##"
+    echo "## ❌ Tweet posting failed. ##"
 fi
